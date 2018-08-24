@@ -1,17 +1,7 @@
 package com.digitalpetri.opcua.nodeset.util;
 
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-
 import org.eclipse.milo.opcua.stack.core.Identifiers;
-import org.eclipse.milo.opcua.stack.core.serialization.xml.XmlDecoder;
+import org.eclipse.milo.opcua.stack.core.serialization.OpcUaXmlStreamDecoder;
 import org.eclipse.milo.opcua.stack.core.types.builtin.DataValue;
 import org.eclipse.milo.opcua.stack.core.types.builtin.NodeId;
 import org.eclipse.milo.opcua.stack.core.types.builtin.Variant;
@@ -19,6 +9,16 @@ import org.eclipse.milo.opcua.stack.core.types.builtin.unsigned.UInteger;
 import org.opcfoundation.ua.generated.GeneratedReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static org.eclipse.milo.opcua.stack.core.types.builtin.unsigned.Unsigned.uint;
 
@@ -90,8 +90,8 @@ public class AttributeUtil {
 
         String xmlString = sw.toString();
         try {
-            XmlDecoder xmlDecoder = new XmlDecoder(new StringReader(xmlString));
-            Object valueObject = xmlDecoder.decodeVariantValue();
+            OpcUaXmlStreamDecoder xmlDecoder = new OpcUaXmlStreamDecoder(new StringReader(xmlString));
+            Object valueObject = xmlDecoder.readVariantValue();
 
             return new DataValue(new Variant(valueObject));
         } catch (Throwable t) {
